@@ -86,18 +86,25 @@ namespace ConsoleApp1
         static void Main(string[] args)
         {
             temp_table table1 =new temp_table();
+            for (int i = 0; i < 7; i++) {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.Write($"{(days)i }\t");
+            }
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.WriteLine();
             for (int i = 0; i < (table1.temp).GetLength(0); i++)
             {
+                
                 for (int j = 0; j < (table1.temp).GetLength(1); j++)
 
                 { 
                     if (table1.temp[i, j] != -150000000) 
-                        Console.Write($"{(days)(((table1.temp.GetLength(1) * i + j)+1)%7)} {table1.temp[i, j]} ");
-                    else Console.Write($"{(days)(((table1.temp.GetLength(1) * i + j) + 1) % 7)} ");
+                        Console.Write($"{(((table1.temp.GetLength(1) * i + j) + 1))} {table1.temp[i, j]}\t");
+                    else Console.Write($"\t\t");
                 }
                 Console.WriteLine();
             }
-            
-        }
+
+        } // (days)(((table1.temp.GetLength(1) * i + j)+1)%7)}
     }
 }
