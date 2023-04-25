@@ -1,5 +1,7 @@
 using System;
-
+//дополнить двухмерный массив до максимума, чтоб можно было сдвигать без боязни
+// сдвиг влево
+// навести красоту
 namespace ConsoleApp1
 {
     enum month1
@@ -51,6 +53,7 @@ namespace ConsoleApp1
             this.month_l = month_length[(int)this.month];
             int k = 0;
             bool end = false;
+            
             for (int i = 0; i < temp.GetLength(0); i++)
             {
                 for (int j = 0; j < temp.GetLength(1); j++)
@@ -81,7 +84,7 @@ namespace ConsoleApp1
                     
                     
                 }
-                if (end) break;
+                if (end) break; 
             }
         }
         public temp_table(int day, int month)
@@ -135,45 +138,91 @@ namespace ConsoleApp1
         }
         public void change_talbe()
         {
-            int day1 = this.day;
-            int tmp;
-            int [,] p = { { 1,2,3,4,5}, { 5,6,7,8,9 }, { 10,11,12,13,14} };
-            if (this.day > 0)
-            while (this.day != 0)
+            int day1 = 2;
+
+            
+            int[,] p = { { 1, 2, 3, 4, 5 }, 
+                           { 6, 7, 8, 9,  10}, 
+                            { 11, 12, 13, 14, 15 },
+                            { 0,0,0,0,0 } 
+            };
+            
+            for (int i = 0; i < p.GetLength(0); i++)
             {
-                for (int i = 0; i < this.temp.GetLength(0); i++)
+                for (int j = 0; j < p.GetLength(1); j++)
                 {
-
-                    if (i != 0)
-                    {
-                        tmp = this.temp[i, this.temp.GetLength(1) - 1];
-                        for (int j = this.temp.GetLength(1) - 1; j != 0; j--) { 
-                            this.temp[i, j] = this.temp[i, j - 1];
-                            this.temp[i, 0] = tmp;
-                        }
-                    }
-                    else
-                    {
-
-                        for (int j = this.temp.GetLength(1) - 1; j != 0; --j)
-                        {
-                            this.temp[i, j] = this.temp[i, j - 1];
-                            this.temp[0, 0] = temp_table.NoData;
-                        }
-                    }
-
-
-
-
-
+                    Console.Write($"{p[i, j]} ");
                 }
-                this.day--; // сдвиг вправо, то есть день меняется в большую сторону 
-
+                Console.WriteLine();
             }
+            int tmp;
+            bool aft_zer = true;
+            Console.WriteLine('_') ;
+            int[] mas = new int [5];
+            int tmp1;
+            if (this.day > 0)
+                
+            while (day1 > 0)
+            {
+                    for (int i = 0; i < p.GetLength(0); i++)
+                    {
+                        tmp = p[i, p.GetLength(1) - 1];
+                        mas[i] = tmp;
+                        for (int j = p.GetLength(1) - 1; j > 0; j--)
+                        {
+                            p[i, j] = p[i, j - 1];
+
+                        }
+                        Console.WriteLine();
+                        for (int k = 0;k < p.GetLength(0);k++)
+                        {
+                            for (int j = 0; j < p.GetLength(1); j++)
+                            {
+                            }
+                        }
+                    }
+                    for (int i = 0; i < p.GetLength(0)-1; i++)
+                    {
+                        p[i+1, 0] = mas[i];
+                    }
+                    day1--; 
+                    Console.WriteLine();
+                    for (int i = 0; i < p.GetLength(0); i++)
+                    {
+                        for (int j = 0; j < p.GetLength(1); j++)
+                        {
+                            Console.Write($"{p[i, j]} ");
+                        }
+                        Console.WriteLine();
+                    } // сдвиг вправо, то есть день меняется в большую сторону
+                }
+
+
 
 
         }
+        public void move_mas(){
+            int[] a = { 1,2,3,4 };
+            int tem;
+            int k = 2;
+            
+            while (k > 0) {
+                tem = a[a.Length - 1];
+                for (int j = a.Length - 1; j > 0; j--)
+                {
 
+                    a[j] = a[j - 1];
+
+                }
+                k--;
+                a[0] = tem;
+            }
+            
+            for (int j = 0; j <a.Length; j++)
+            {
+                Console.Write($"{a[j]} ");
+            }
+        }
         public int biggest_jump(out int day, out int temp)
         {
             int res = 0;
