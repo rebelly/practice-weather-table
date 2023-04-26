@@ -48,17 +48,28 @@ namespace ConsoleApp1
             Random rnd = new Random();
             this.month = (month1)rnd.Next(1, 11);
             this.day = rnd.Next(0, 7);
+            
             int tem;
-            temp = new int[5, 7];
+            temp = new int[6, 7];
             this.month_l = month_length[(int)this.month];
             int k = 0;
             bool end = false;
-            
+            temp_table.gen_mass(out temp, this.day, this.month_l, this.mintemp, this.maxtemp);
+
+        }
+        static void gen_mass(out int[,] temp, int day, int month_l,  int[] mintemp, int[] maxtemp)
+        {
+            Random rnd = new Random();
+            temp = new int[6, 7];
+            int k = 0;
+            bool end = false;
+            int tem;
             for (int i = 0; i < temp.GetLength(0); i++)
             {
                 for (int j = 0; j < temp.GetLength(1); j++)
                 {
-                    if (k >= this.month_l) { 
+                    if (k >= month_l)
+                    {
                         end = true;
                         break;
                     }
@@ -81,10 +92,10 @@ namespace ConsoleApp1
                         temp[i, j] = tem;
                         k++;
                     }
-                    
-                    
+
+
                 }
-                if (end) break; 
+                if (end) break;
             }
         }
         public temp_table(int day, int month)
@@ -94,135 +105,95 @@ namespace ConsoleApp1
             this.month_l = month_length[(int)this.month];
             int k = 0;
             bool end = false;
-            temp = new int[5, 7];
+            temp = new int[6, 7];
             this.month = (month1)month;
-            for (int i = 0; i < temp.GetLength(0); i++)
-            {
-                for (int j = 0; j < temp.GetLength(1); j++)
-                {
-                    if (k >= this.month_l)
-                    {
-                        end = true;
-                        break;
-                    }
-                    if (i == 0)
-                    {
-                        if (j > day) { temp[i, j] = rnd.Next(mintemp[i], maxtemp[i]); k++; }
-                        else { temp[i, j] = temp_table.NoData; }
-                    }
-                    else
-                    {
-                        temp[i, j] = rnd.Next(mintemp[i], maxtemp[i]);
-                            k++;
-                        }
-                }
-            }
+            temp_table.gen_mass(out temp, this.day, this.month_l, this.mintemp, this.maxtemp);
+
         }
         public int biggest_jump()
         {
             int res = 0;
-            int prev=  -1;
+            int prev = -1;
             for (int i = 0; i < this.temp.GetLength(0); i++)
             {
-                if (prev != -1000 & this.temp[i, 0]  != -1000 &  Math.Abs(prev - this.temp[i, 0]) > res) res = Math.Abs(prev - this.temp[i, 0]);
+                if (prev != -1000 & this.temp[i, 0] != -1000 & Math.Abs(prev - this.temp[i, 0]) > res) res = Math.Abs(prev - this.temp[i, 0]);
                 for (int j = 0; j < this.temp.GetLength(1) - 1; j++)
                 {
-                    if (this.temp[i, j] != -1000 & Math.Abs(this.temp[i, j] - this.temp[i, j + 1]) > res) {
+                    if (this.temp[i, j] != -1000 & Math.Abs(this.temp[i, j] - this.temp[i, j + 1]) > res)
+                    {
                         res = Math.Abs(this.temp[i, j] - this.temp[i, j + 1]);
+                    }
+
                 }
-                    
-                }
-                prev = this.temp[i, this.temp.GetLength(1)-1];
+                prev = this.temp[i, this.temp.GetLength(1) - 1];
             }
             return res;
         }
-        public void change_talbe()
+        public void change_talbe(int day2)
         {
-            int day1 = 2;
+            int tmp;    
+            int[] mas = new int[7];
+            int day1 = day2 - this.day-1;
+            Console.WriteLine(day1);
+            if (day1 > 0)
+            {
 
-            
-            int[,] p = { { 1, 2, 3, 4, 5 }, 
-                           { 6, 7, 8, 9,  10}, 
-                            { 11, 12, 13, 14, 15 },
-                            { 0,0,0,0,0 } 
-            };
-            
-            for (int i = 0; i < p.GetLength(0); i++)
-            {
-                for (int j = 0; j < p.GetLength(1); j++)
+                while (day1 > 0)
                 {
-                    Console.Write($"{p[i, j]} ");
-                }
-                Console.WriteLine();
-            }
-            int tmp;
-            bool aft_zer = true;
-            Console.WriteLine('_') ;
-            int[] mas = new int [5];
-            int tmp1;
-            if (this.day > 0)
-                
-            while (day1 > 0)
-            {
-                    for (int i = 0; i < p.GetLength(0); i++)
+                    for (int i = 0; i < this.temp.GetLength(0); i++)
                     {
-                        tmp = p[i, p.GetLength(1) - 1];
+                        tmp = this.temp[i, this.temp.GetLength(1) - 1];
                         mas[i] = tmp;
-                        for (int j = p.GetLength(1) - 1; j > 0; j--)
+                        for (int j = this.temp.GetLength(1) - 1; j > 0; j--)
                         {
-                            p[i, j] = p[i, j - 1];
+                            this.temp[i, j] = this.temp[i, j - 1];
 
                         }
-                        Console.WriteLine();
-                        for (int k = 0;k < p.GetLength(0);k++)
-                        {
-                            for (int j = 0; j < p.GetLength(1); j++)
-                            {
-                            }
-                        }
-                    }
-                    for (int i = 0; i < p.GetLength(0)-1; i++)
                     {
-                        p[i+1, 0] = mas[i];
+
+                    } 
                     }
-                    day1--; 
-                    Console.WriteLine();
-                    for (int i = 0; i < p.GetLength(0); i++)
+                    for (int i = 1; i < this.temp.GetLength(0); i++)
                     {
-                        for (int j = 0; j < p.GetLength(1); j++)
-                        {
-                            Console.Write($"{p[i, j]} ");
-                        }
-                        Console.WriteLine();
-                    } // сдвиг вправо, то есть день меняется в большую сторону
-                }
-
-
-
-
-        }
-        public void move_mas(){
-            int[] a = { 1,2,3,4 };
-            int tem;
-            int k = 2;
-            
-            while (k > 0) {
-                tem = a[a.Length - 1];
-                for (int j = a.Length - 1; j > 0; j--)
+                        this.temp[i - 1, 0] = mas[i];
+                    }
+                    this.temp[temp.GetLength(0) - 1, 1] = mas[mas.Length-1];
+                    day1--;
+                } // сдвиг вправо, то есть день меняется в большую сторону
+                for (int i = 0; i < day2 - this.day; i++)
                 {
-
-                    a[j] = a[j - 1];
-
+                    temp[0, i] = -1000;
                 }
-                k--;
-                a[0] = tem;
             }
-            
-            for (int j = 0; j <a.Length; j++)
-            {
-                Console.Write($"{a[j]} ");
+            else
+            { // тут такая логика, если у нас изначально первый день - среда, но в процессе меняется на четверг, то данные со среды должны кануть в небытье потому что среда становится последним днем
+                // предыдушего месяцая  
+                day1 = -day1;
+                while (day1 > 0)
+                {
+                    for (int i = 0; i < this.temp.GetLength(0); i++)
+                    {
+                        tmp = this.temp[i, 0];
+                        mas[i] = tmp;
+                        for (int j = 1; j < this.temp.GetLength(1); j++)
+                        {
+                            this.temp[i, j-1] = this.temp[i, j ];
+
+                        }
+
+                    }
+                    for (int i = this.temp.GetLength(0) ; i > 0; i--)
+                    {
+                        this.temp[i -  1, this.temp.GetLength(1)-1] = mas[i];
+                    }
+                    day1--;
+                } 
+                    for (int i = this.temp.GetLength(1)-1; i > -(day2 - this.day); i--)
+                    {
+                        temp[this.temp.GetLength(0)-1, i] = -1000;
+                }  // сдвиг влево, то есть если дата становится меньше
             }
-        }
+                }
         public int biggest_jump(out int day, out int temp)
         {
             int res = 0;
@@ -263,7 +234,7 @@ namespace ConsoleApp1
                 for (int j = 0; j<(this.temp).GetLength(1); j++)
 
                 {
-                    if (k >= this.month_l)
+                    if (k >= 31)
                     {
                         end = true;
                         break;
@@ -290,7 +261,8 @@ namespace ConsoleApp1
             }
             set
             {
-                if (value > 0 & value <= 7) { 
+                if (value > 0 & value <= 7) {
+                    change_talbe(value);
                     day = value;
                 
                 }
@@ -300,13 +272,7 @@ namespace ConsoleApp1
                 }
             }
         }
-        public int Temp1
-        {
-            set
-            {
-                
-            }
-        }
+
         public int Month
         {
             get
@@ -368,15 +334,67 @@ namespace ConsoleApp1
     {
         static void Main(string[] args)
         {
-            temp_table table1 = new temp_table();
+            temp_table table1; // не 
+            
+            
+            int k = 0;
+            bool end = false;
+           
+            Console.WriteLine();
+
+            int day_g;
+            int month_g;
+            bool nailed = false;
+            Console.WriteLine("Введите 0 , если хотите ввести номер месяца и первый день месяца вручную и 1, если хотите сделать это автоматически");
+            string a = Console.ReadLine();
+            if (int.TryParse(a, out int x))
+            {
+                if (x == 0) {
+                    Console.WriteLine("Введите месяц, где январь - 1, декабрь - 12");
+                    string month1 = Console.ReadLine();
+                    if (!int.TryParse(month1, out month_g))
+                    {
+                        if (month_g <= 0 | month_g >= 13)
+                        {
+                            Console.WriteLine("Не удалось установить такой месяц, создаю объект по умолчанию");
+                            table1 = new temp_table();
+                            nailed = true;
+                        }
+                    }
+                    Console.WriteLine("Введите первый день, где понедельник - 1, воскресенье - 7");
+                    string day1 = Console.ReadLine();
+                    if (!int.TryParse(day1, out day_g) )
+                    {
+                        if (day_g <= 0 | day_g >= 8)
+                        {
+                            Console.WriteLine("Не удалось установить такой первый день, создаю объект по умолчанию");
+                            table1 = new temp_table();
+                            nailed = true;
+                        }
+                    }
+
+                    if (nailed)
+                        table1 = new temp_table(day_g - 1, month_g - 1);
+                    else
+                    {
+                        Console.WriteLine("Месяц или первый день были заданы неверно, создаю объект по умолчанию");
+                        table1 = new temp_table();
+                    }
+                    
+                }
+                else table1 = new temp_table();
+            }
+            else
+            {
+                Console.WriteLine("Неверно, создаю объект по умолчанию");
+                table1 = new temp_table();
+            }
             for (int i = 1; i < 7; i++)
             {
                 Console.ForegroundColor = ConsoleColor.Green;
                 Console.Write($"{(days)i }\t");
             }
             Console.Write($"{(days)0 }\t");
-            int k = 0;
-            bool end = false;
             Console.ForegroundColor = ConsoleColor.White;
             Console.WriteLine();
             table1.print_table();
@@ -386,12 +404,7 @@ namespace ConsoleApp1
             int tem;
             int last;
             table1.Day = int.Parse(Console.ReadLine());
-            table1.change_talbe();
-            
-
             table1.print_table();
-        } // (days)(((table1.temp.GetLength(1) * i + j)+1)%7)}
+        } 
     }
 }
-//                    if (i != 0)
-//table1.temp[i + 1, 0] = last;
