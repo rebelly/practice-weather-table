@@ -1,7 +1,5 @@
 using System;
-//дополнить двухмерный массив до максимума, чтоб можно было сдвигать без боязни
-// сдвиг влево
-// навести красоту
+
 namespace ConsoleApp1
 {
     enum month1
@@ -178,7 +176,7 @@ namespace ConsoleApp1
             }
             else
             { // тут такая логика, если у нас изначально первый день - среда, но в процессе меняется на четверг, то данные со среды должны кануть в небытье потому что среда становится последним днем
-                // предыдушего месяцая  
+                // предыдушего месяца 
                 day1 = -day1;
                 while (day1 > 0)
                 {
@@ -345,12 +343,9 @@ namespace ConsoleApp1
     {
         static void Main(string[] args)
         {
-            temp_table table1; // не 
-            
-            
+            temp_table table1; 
             int k = 0;
             bool end = false;
-           
             Console.WriteLine();
             int day;
             int temp;
@@ -404,10 +399,7 @@ namespace ConsoleApp1
                 Console.WriteLine("Неверно, создаю объект по умолчанию");
                 table1 = new temp_table();
             }
-            
-
             string req;
-            
             do
             {
                 
@@ -441,7 +433,6 @@ namespace ConsoleApp1
                 }
             }
             while (req != "0");
-
         } 
     }
 }
