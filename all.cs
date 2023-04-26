@@ -1,9 +1,12 @@
 using System;
+//дополнить двухмерный массив до максимума, чтоб можно было сдвигать без боязни
+// сдвиг влево
+// навести красоту
 namespace ConsoleApp1
 {
     enum month1
     {
-        январь = 1,
+        январь = 0,
         февраль,
         март,
         апрель,
@@ -33,8 +36,9 @@ namespace ConsoleApp1
         public month1 month;
         static int[] month_length = new int[]
         {
-           31, 28,31,30,31,30,31,30,31,30,31
+           31, 28,31,30,31,30,31,31,30,31,30,31
         };
+        public int month_n;
         public int day;
         public int[,] temp;
         private int[] maxtemp = { -5, -3, 2, 11, 19, 22, 24, 22, 16, 8, 1, -3 };
@@ -43,25 +47,34 @@ namespace ConsoleApp1
         public temp_table()
         {
             Random rnd = new Random();
-            this.month = (month1)rnd.Next(1, 11);
+            this.month_n = rnd.Next(1, 12);
+            this.month = (month1)(month_n);
             this.day = rnd.Next(0, 7);
             
             int tem;
             temp = new int[6, 7];
-            this.month_l = month_length[(int)this.month];
+            this.month_l = month_length[this.month_n];
             int k = 0;
             bool end = false;
-            temp_table.gen_mass(out temp, this.day, this.month_l, this.mintemp, this.maxtemp);
+            temp_table.gen_mass(out temp, this.day, this.month_l, this.mintemp, this.maxtemp, this.month_n);
 
         }
-        static void gen_mass(out int[,] temp, int day, int month_l,  int[] mintemp, int[] maxtemp)
+        static void gen_mass(out int[,] temp, int day, int month_l,  int[] mintemp, int[] maxtemp, int month_n)
         {
             Random rnd = new Random();
             temp = new int[6, 7];
             int k = 0;
             bool end = false;
             int tem;
+            
             for (int i = 0; i < temp.GetLength(0); i++)
+            {
+                for (int j = 0; j < temp.GetLength(1); j++)
+                {
+                    temp[i, j] = -1000;
+                }
+            }
+                    for (int i = 0; i < temp.GetLength(0); i++)
             {
                 for (int j = 0; j < temp.GetLength(1); j++)
                 {
@@ -74,7 +87,7 @@ namespace ConsoleApp1
                     {
                         if (j >= day)
                         {
-                            tem = rnd.Next(mintemp[i], maxtemp[i]);
+                            tem = rnd.Next(mintemp[month_n], maxtemp[month_n]);
                             temp[i, j] = tem;
                             k++;
                         }
@@ -85,7 +98,7 @@ namespace ConsoleApp1
                     }
                     else
                     {
-                        tem = rnd.Next(mintemp[i], maxtemp[i]);
+                        tem = rnd.Next(mintemp[month_n], maxtemp[month_n]);
                         temp[i, j] = tem;
                         k++;
                     }
@@ -103,8 +116,9 @@ namespace ConsoleApp1
             int k = 0;
             bool end = false;
             temp = new int[6, 7];
-            this.month = (month1)month;
-            temp_table.gen_mass(out temp, this.day, this.month_l, this.mintemp, this.maxtemp);
+            this.month = (month1)(month);
+            this.month_n = month;
+            temp_table.gen_mass(out temp, this.day, this.month_l, this.mintemp, this.maxtemp, this.month_n);
 
         }
         public int biggest_jump()
@@ -116,7 +130,7 @@ namespace ConsoleApp1
                 if (prev != -1000 & this.temp[i, 0] != -1000 & Math.Abs(prev - this.temp[i, 0]) > res) res = Math.Abs(prev - this.temp[i, 0]);
                 for (int j = 0; j < this.temp.GetLength(1) - 1; j++)
                 {
-                    if (this.temp[i, j] != -1000 & Math.Abs(this.temp[i, j] - this.temp[i, j + 1]) > res)
+                    if (this.temp[i, j] != -1000 & this.temp[i, j + 1]  != -1000&  Math.Abs(this.temp[i, j] - this.temp[i, j + 1]) > res)
                     {
                         res = Math.Abs(this.temp[i, j] - this.temp[i, j + 1]);
                     }
@@ -209,7 +223,7 @@ namespace ConsoleApp1
                 for (int j = 0; j < this.temp.GetLength(1) - 1; j++)
                 {
                     if (this.temp[i, j] != -1000) k++;
-                    if (this.temp[i, j] != -1000 & Math.Abs(this.temp[i, j] - this.temp[i, j + 1]) > res)
+                    if (this.temp[i, j] != -1000 & this.temp[i, j + 1] != -1000 & Math.Abs(this.temp[i, j] - this.temp[i, j + 1]) > res)
                     {
                         res = Math.Abs(this.temp[i, j] - this.temp[i, j + 1]);
                         day = k;
@@ -338,7 +352,8 @@ namespace ConsoleApp1
             bool end = false;
            
             Console.WriteLine();
-
+            int day;
+            int temp;
             int day_g;
             int month_g;
             bool nailed = false;
@@ -351,10 +366,12 @@ namespace ConsoleApp1
                     string month1 = Console.ReadLine();
                     if (!int.TryParse(month1, out month_g))
                     {
+                        nailed = true;
+                    }
+                    else
+                    {
                         if (month_g <= 0 | month_g >= 13)
                         {
-                            Console.WriteLine("Не удалось установить такой месяц, создаю объект по умолчанию");
-                            table1 = new temp_table();
                             nailed = true;
                         }
                     }
@@ -362,15 +379,16 @@ namespace ConsoleApp1
                     string day1 = Console.ReadLine();
                     if (!int.TryParse(day1, out day_g) )
                     {
+                        nailed = true;
+                    }
+                    else
+                    {
                         if (day_g <= 0 | day_g >= 8)
                         {
-                            Console.WriteLine("Не удалось установить такой первый день, создаю объект по умолчанию");
-                            table1 = new temp_table();
                             nailed = true;
                         }
                     }
-
-                    if (nailed)
+                    if (!nailed)
                         table1 = new temp_table(day_g - 1, month_g - 1);
                     else
                     {
@@ -386,22 +404,44 @@ namespace ConsoleApp1
                 Console.WriteLine("Неверно, создаю объект по умолчанию");
                 table1 = new temp_table();
             }
-            for (int i = 1; i < 7; i++)
+            
+
+            string req;
+            
+            do
             {
-                Console.ForegroundColor = ConsoleColor.Green;
-                Console.Write($"{(days)i }\t");
+                
+               
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.WriteLine($"Дневник погоды за месяц {table1.month}");
+                for (int i = 1; i < 7; i++)
+                {
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.Write($"{(days)i }\t");
+                }
+                Console.Write($"{(days)0 }\t");
+                Console.WriteLine();
+                table1.print_table();
+                Console.WriteLine();
+                Console.WriteLine($"Количество дней в дневнике погоды за месяц {table1.month}: {table1.Diary_Days}");
+                Console.WriteLine($"Количество дней в дневнике погоды, когда темперпатура была 0 градусов, месяц {table1.month}: {table1.zer_days}");
+                Console.WriteLine($"Максимальный перепад температуры составил: {table1.biggest_jump()}");
+                Console.WriteLine($"Максимальный перепад температуры составил: {table1.biggest_jump(out day, out temp)}. Это произошло {day} числа, в тот день температура была равна {temp}");
+                Console.ForegroundColor = ConsoleColor.Blue;
+                Console.WriteLine("Список команд:");
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.WriteLine("Введите 1, если хотите поменять дату первого дня месяца или введите 0, если хотите завершить работу с программой");
+                req = Console.ReadLine();
+                if (req == "1")
+                {
+                    Console.WriteLine("Введите номер дня недели, который равен первому дню месяца, где 1 - понедельник, 7 - воскресенье");
+                    string tr = Console.ReadLine();
+                    if (int.TryParse(tr, out int ok))
+                        table1.Day = ok;
+                }
             }
-            Console.Write($"{(days)0 }\t");
-            Console.ForegroundColor = ConsoleColor.White;
-            Console.WriteLine();
-            table1.print_table();
-            int day;
-            int temp;
-            Console.WriteLine($"Максимальный перепад температуры составил {table1.biggest_jump(out day, out temp)} это произошло {day} числа, в тот день температура была равна {temp}");
-            int tem;
-            int last;
-            table1.Day = int.Parse(Console.ReadLine());
-            table1.print_table();
+            while (req != "0");
+
         } 
     }
 }
