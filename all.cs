@@ -1,5 +1,4 @@
 using System;
-// закрыть поля
 namespace ConsoleApp1
 {
     enum month1
@@ -35,9 +34,9 @@ namespace ConsoleApp1
         {
            31, 28,31,30,31,30,31,31,30,31,30,31
         };
-        public int month_n;
-        public int day;
-        public int[,] temp;
+        private int month_n;
+        private int day;
+        private int[,] temp;
         private int[] maxtemp = { -5, -3, 2, 11, 19, 22, 24, 22, 16, 8, 1, -3 };
         private int[] mintemp = { -10, -10, -5, 2, 8, 12, 14, 12, 7, 2, -3, -7 };
         public int month_l;
@@ -47,20 +46,20 @@ namespace ConsoleApp1
             this.month_n = rnd.Next(1, 12);
             this.month = (month1)(month_n);
             this.day = rnd.Next(0, 7);
-            
+
             temp = new int[6, 7];
             this.month_l = month_length[this.month_n];
             temp_table.gen_mass(out temp, this.day, this.month_l, this.mintemp, this.maxtemp, this.month_n);
 
         }
-        static void gen_mass(out int[,] temp, int day, int month_l,  int[] mintemp, int[] maxtemp, int month_n)
+        static void gen_mass(out int[,] temp, int day, int month_l, int[] mintemp, int[] maxtemp, int month_n)
         {
             Random rnd = new Random();
             temp = new int[6, 7];
             int k = 0;
             bool end = false;
             int tem;
-           
+
             for (int i = 0; i < temp.GetLength(0); i++)
             {
                 for (int j = 0; j < temp.GetLength(1); j++)
@@ -68,7 +67,7 @@ namespace ConsoleApp1
                     temp[i, j] = -1000;
                 }
             }
-                    for (int i = 0; i < temp.GetLength(0); i++)
+            for (int i = 0; i < temp.GetLength(0); i++)
             {
                 for (int j = 0; j < temp.GetLength(1); j++)
                 {
@@ -121,7 +120,7 @@ namespace ConsoleApp1
                 if (prev != -1000 & this.temp[i, 0] != -1000 & Math.Abs(prev - this.temp[i, 0]) > res) res = Math.Abs(prev - this.temp[i, 0]);
                 for (int j = 0; j < this.temp.GetLength(1) - 1; j++)
                 {
-                    if (this.temp[i, j] != -1000 & this.temp[i, j + 1]  != -1000&  Math.Abs(this.temp[i, j] - this.temp[i, j + 1]) > res)
+                    if (this.temp[i, j] != -1000 & this.temp[i, j + 1] != -1000 & Math.Abs(this.temp[i, j] - this.temp[i, j + 1]) > res)
                     {
                         res = Math.Abs(this.temp[i, j] - this.temp[i, j + 1]);
                     }
@@ -133,11 +132,11 @@ namespace ConsoleApp1
         }
         public void change_talbe(int day2)
         {
-            int tmp;    
+            int tmp;
             Random rnd = new Random();
             int[] mas = new int[7];
             int day1 = day2 - this.day;
-             Console.WriteLine(day);
+            Console.WriteLine(day);
             Console.WriteLine(day1);
             if (day1 > 0)
             {
@@ -153,16 +152,16 @@ namespace ConsoleApp1
                             this.temp[i, j] = this.temp[i, j - 1];
 
                         }
-                    {
+                        {
 
-                    } 
+                        }
                     }
                     for (int i = 1; i < this.temp.GetLength(0); i++)
                     {
                         this.temp[i - 1, 0] = mas[i];
                     }
-                    if ( mas[mas.Length-1] != -1000)
-                    this.temp[temp.GetLength(0) - 1, 1] = mas[mas.Length-1];
+                    if (mas[mas.Length - 1] != -1000)
+                        this.temp[temp.GetLength(0) - 1, 1] = mas[mas.Length - 1];
                     else this.temp[temp.GetLength(0) - 1, 1] = rnd.Next(this.mintemp[this.month_n], this.maxtemp[this.month_n]);
                     day1--;
                 } // сдвиг вправо, то есть день меняется в большую сторону
@@ -183,20 +182,20 @@ namespace ConsoleApp1
                         mas[i] = tmp;
                         for (int j = 1; j < this.temp.GetLength(1); j++)
                         {
-                            this.temp[i, j-1] = this.temp[i, j ];
+                            this.temp[i, j - 1] = this.temp[i, j];
 
                         }
 
                     }
-                    for (int i = this.temp.GetLength(0) ; i > 0; i--)
+                    for (int i = this.temp.GetLength(0); i > 0; i--)
                     {
-                        this.temp[i -  1, this.temp.GetLength(1)-1] = mas[i];
+                        this.temp[i - 1, this.temp.GetLength(1) - 1] = mas[i];
                     }
                     day1--;
-                } 
-// сдвиг влево, то есть если дата становится меньше
-            }
                 }
+                // сдвиг влево, то есть если дата становится меньше
+            }
+        }
         public int biggest_jump(out int day, out int temp)
         {
             int res = 0;
@@ -207,7 +206,8 @@ namespace ConsoleApp1
             for (int i = 0; i < this.temp.GetLength(0); i++)
             {
                 if (prev != -1000) k++;
-                if (prev != -1000 & this.temp[i, 0] != -1000 & Math.Abs(prev - this.temp[i, 0]) > res) { 
+                if (prev != -1000 & this.temp[i, 0] != -1000 & Math.Abs(prev - this.temp[i, 0]) > res)
+                {
                     res = Math.Abs(prev - this.temp[i, 0]);
                     day = k;
                     temp = prev;
@@ -231,10 +231,10 @@ namespace ConsoleApp1
         {
             bool end = false;
             int k = 0;
-            for (int i = 0; i<(this.temp).GetLength(0); i++)
+            for (int i = 0; i < (this.temp).GetLength(0); i++)
             {
 
-                for (int j = 0; j<(this.temp).GetLength(1); j++)
+                for (int j = 0; j < (this.temp).GetLength(1); j++)
 
                 {
                     if (k >= 31)
@@ -264,10 +264,11 @@ namespace ConsoleApp1
             }
             set
             {
-                if (value > 0 & value <= 7) {
-                    change_talbe(value-1);
-                    day = value-1;
-                
+                if (value > 0 & value <= 7)
+                {
+                    change_talbe(value - 1);
+                    day = value - 1;
+
                 }
                 else
                 {
@@ -282,9 +283,9 @@ namespace ConsoleApp1
             {
                 return (int)this.month;
             }
-           
+
         }
-       
+
         public int[,] Temp
         {
             get
@@ -297,9 +298,9 @@ namespace ConsoleApp1
             get
             {
                 int res = 0;
-                for (int i = 0; i < this.temp.GetLength(0) ; i++)
+                for (int i = 0; i < this.temp.GetLength(0); i++)
                 {
-                    for (int j = 0; j < this.temp.GetLength(1) ; j++)
+                    for (int j = 0; j < this.temp.GetLength(1); j++)
                     {
                         if (this.temp[i, j] != -1000) res++;
                     }
@@ -337,7 +338,7 @@ namespace ConsoleApp1
     {
         static void Main(string[] args)
         {
-            temp_table table1; 
+            temp_table table1;
             Console.WriteLine();
             int day;
             int temp;
@@ -348,7 +349,8 @@ namespace ConsoleApp1
             string a = Console.ReadLine();
             if (int.TryParse(a, out int x))
             {
-                if (x == 0) {
+                if (x == 0)
+                {
                     Console.WriteLine("Введите месяц, где январь - 1, декабрь - 12");
                     string month1 = Console.ReadLine();
                     if (!int.TryParse(month1, out month_g))
@@ -364,7 +366,7 @@ namespace ConsoleApp1
                     }
                     Console.WriteLine("Введите первый день, где понедельник - 1, воскресенье - 7");
                     string day1 = Console.ReadLine();
-                    if (!int.TryParse(day1, out day_g) )
+                    if (!int.TryParse(day1, out day_g))
                     {
                         nailed = true;
                     }
@@ -382,7 +384,7 @@ namespace ConsoleApp1
                         Console.WriteLine("Месяц или первый день были заданы неверно, создаю объект по умолчанию");
                         table1 = new temp_table();
                     }
-                    
+
                 }
                 else table1 = new temp_table();
             }
@@ -391,12 +393,12 @@ namespace ConsoleApp1
                 Console.WriteLine("Неверно, создаю объект по умолчанию");
                 table1 = new temp_table();
             }
-            
+
             string req;
             do
             {
-                
-               
+
+
                 Console.ForegroundColor = ConsoleColor.White;
                 Console.WriteLine($"Дневник погоды за месяц {table1.month}");
                 for (int i = 1; i < 7; i++)
@@ -426,6 +428,6 @@ namespace ConsoleApp1
                 }
             }
             while (req != "0");
-        } 
+        }
     }
 }
