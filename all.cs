@@ -3,18 +3,18 @@ namespace ConsoleApp1
 {
     enum month1
     {
-        январь = 0,
-        февраль,
-        март,
-        апрель,
-        май,
-        июнь,
-        июль,
-        август,
-        сентябрь,
-        октябрь,
-        ноябрь,
-        декабрь
+        Январь = 0,
+        Февраль,
+        Март,
+        Апрель,
+        Май,
+        Июнь,
+        Июль,
+        Август,
+        Сентябрь,
+        Октябрь,
+        Ноябрь,
+        Декабрь
     }
     enum days
     {
@@ -29,7 +29,7 @@ namespace ConsoleApp1
     }
     class temp_table
     {
-        public month1 month;
+        private month1 month;
         static int[] month_length = new int[]
         {
            31, 28,31,30,31,30,31,31,30,31,30,31
@@ -39,7 +39,7 @@ namespace ConsoleApp1
         private int[,] temp;
         private int[] maxtemp = { -5, -3, 2, 11, 19, 22, 24, 22, 16, 8, 1, -3 };
         private int[] mintemp = { -10, -10, -5, 2, 8, 12, 14, 12, 7, 2, -3, -7 };
-        public int month_l;
+        private int month_l;
         public temp_table()
         {
             Random rnd = new Random();
@@ -132,6 +132,7 @@ namespace ConsoleApp1
         }
         public void change_talbe(int day2)
         {
+
             int tmp;
             Random rnd = new Random();
             int[] mas = new int[7];
@@ -143,32 +144,33 @@ namespace ConsoleApp1
 
                 while (day1 > 0)
                 {
-                    for (int i = 0; i < this.temp.GetLength(0); i++)
+                    for (int i = 0; i < this.temp.GetLength(0)-1; i++)
                     {
                         tmp = this.temp[i, this.temp.GetLength(1) - 1];
+                        
                         mas[i] = tmp;
                         for (int j = this.temp.GetLength(1) - 1; j > 0; j--)
                         {
                             this.temp[i, j] = this.temp[i, j - 1];
 
                         }
-                        {
-
-                        }
                     }
                     for (int i = 1; i < this.temp.GetLength(0); i++)
                     {
-                        this.temp[i - 1, 0] = mas[i];
+                        Console.WriteLine(mas[i]);
+                        if (mas[i]!= -1000)
+                            this.temp[i - 1, 0] = mas[i];
                     }
                     if (mas[mas.Length - 1] != -1000)
                         this.temp[temp.GetLength(0) - 1, 1] = mas[mas.Length - 1];
-                    else this.temp[temp.GetLength(0) - 1, 1] = rnd.Next(this.mintemp[this.month_n], this.maxtemp[this.month_n]);
+                    for( int i = 0; i < 7; i++)
+                    {
+                        if (temp[0, i] != -1000) temp[0, i] = -1000;
+                        else break;
+                    }
                     day1--;
                 } // сдвиг вправо, то есть день меняется в большую сторону
-                for (int i = 0; i < day2 - this.day; i++)
-                {
-                    temp[0, i] = -1000;
-                }
+
             }
             else
             { // тут такая логика, если у нас изначально первый день - среда, но в процессе меняется на четверг, то данные со среды должны кануть в небытье потому что среда становится последним днем
@@ -190,6 +192,13 @@ namespace ConsoleApp1
                     for (int i = this.temp.GetLength(0); i > 0; i--)
                     {
                         this.temp[i - 1, this.temp.GetLength(1) - 1] = mas[i];
+                    }
+                    for (int i = this.temp.GetLength(1)-1; i > 0; i--)
+                    {
+                        if ( this.temp[temp.GetLength(0) - 1, i] != -1000)
+                        this.temp[temp.GetLength(0) - 1, i] = -1000;
+                        else break;
+                        
                     }
                     day1--;
                 }
@@ -229,6 +238,21 @@ namespace ConsoleApp1
         }
         public void print_table()
         {
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.Write($"Дневник погоды за месяц: ");
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.Write($"{(month1)this.month_n}");
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.WriteLine();
+            Console.ForegroundColor = ConsoleColor.White;
+
+            for (int i = 1; i < 7; i++)
+            {
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.Write($"{(days)i }\t");
+            }
+            Console.Write($"{(days)0 }\t");
+            Console.WriteLine();
             bool end = false;
             int k = 0;
             for (int i = 0; i < (this.temp).GetLength(0); i++)
@@ -245,6 +269,7 @@ namespace ConsoleApp1
                     if (this.temp[i, j] != -1000)
                     {
                         k++;
+
                         Console.ForegroundColor = ConsoleColor.Red;
                         Console.Write($"{k} ");
                         Console.ForegroundColor = ConsoleColor.White;
@@ -399,25 +424,47 @@ namespace ConsoleApp1
             {
 
 
-                Console.ForegroundColor = ConsoleColor.White;
-                Console.WriteLine($"Дневник погоды за месяц {table1.month}");
-                for (int i = 1; i < 7; i++)
-                {
-                    Console.ForegroundColor = ConsoleColor.Green;
-                    Console.Write($"{(days)i }\t");
-                }
-                Console.Write($"{(days)0 }\t");
+
+                
                 Console.WriteLine();
                 table1.print_table();
                 Console.WriteLine();
-                Console.WriteLine($"Количество дней в дневнике погоды за месяц {table1.month}: {table1.Diary_Days}");
-                Console.WriteLine($"Количество дней в дневнике погоды, когда темперпатура была 0 градусов, месяц {table1.month}: {table1.zer_days}");
-                Console.WriteLine($"Максимальный перепад температуры составил: {table1.biggest_jump()}");
-                Console.WriteLine($"Максимальный перепад температуры составил: {table1.biggest_jump(out day, out temp)}. Это произошло {day} числа, в тот день температура была равна {temp}");
-                Console.ForegroundColor = ConsoleColor.Blue;
+                Console.Write($"Количество дней в дневнике погоды за месяц: ");
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.Write($"{table1.Diary_Days} \n");
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.Write($"Количество дней в дневнике погоды, когда темперпатура была 0 градусов: ");
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.Write($"{table1.zer_days} \n");
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.Write($"Максимальный перепад температуры составил: ");
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.Write($"{table1.biggest_jump()} \n");
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.Write($"Максимальный перепад температуры составил: ");
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.Write($"{table1.biggest_jump(out day, out temp)}");
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.Write($". Это произошло ");
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.Write($"{day}");
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.Write($" числа, в тот день температура была равна ");
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.Write($"{temp} \n");
+                Console.ForegroundColor = ConsoleColor.Cyan;
                 Console.WriteLine("Список команд:");
                 Console.ForegroundColor = ConsoleColor.White;
-                Console.WriteLine("Введите 1, если хотите поменять дату первого дня месяца или введите 0, если хотите завершить работу с программой");
+                Console.Write("Введите ");
+                Console.ForegroundColor = ConsoleColor.Cyan;
+                Console.Write("1");
+                Console.ForegroundColor= ConsoleColor.White;
+                Console.Write(", если хотите поменять дату первого дня месяца \n");
+                Console.Write("Введите ");
+                Console.ForegroundColor = ConsoleColor.Cyan;
+                Console.Write("0");
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.Write(", если хотите завершить работу с программой \n");
                 req = Console.ReadLine();
                 if (req == "1")
                 {
