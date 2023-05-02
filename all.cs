@@ -1,6 +1,8 @@
 using System;
 namespace ConsoleApp1
-{
+{ //сделать так чтобы таблица висела в воздухе и чтобы движение вправо влево
+    // исключения
+    //gugugaga
     enum month1
     {
         Январь = 0,
@@ -55,7 +57,7 @@ namespace ConsoleApp1
         static void gen_mass(out int[,] temp, int day, int month_l, int[] mintemp, int[] maxtemp, int month_n)
         {
             Random rnd = new Random();
-            temp = new int[6, 7];
+            temp = new int[7, 7];
             int k = 0;
             bool end = false;
             int tem;
@@ -67,7 +69,7 @@ namespace ConsoleApp1
                     temp[i, j] = -1000;
                 }
             }
-            for (int i = 0; i < temp.GetLength(0); i++)
+            for (int i = 1; i < temp.GetLength(0); i++)
             {
                 for (int j = 0; j < temp.GetLength(1); j++)
                 {
@@ -137,17 +139,15 @@ namespace ConsoleApp1
             Random rnd = new Random();
             int[] mas = new int[7];
             int day1 = day2 - this.day;
-            Console.WriteLine(day);
-            Console.WriteLine(day1);
             if (day1 > 0)
             {
 
                 while (day1 > 0)
                 {
-                    for (int i = 0; i < this.temp.GetLength(0)-1; i++)
+                    for (int i = 0; i < this.temp.GetLength(0) - 1; i++)
                     {
                         tmp = this.temp[i, this.temp.GetLength(1) - 1];
-                        
+
                         mas[i] = tmp;
                         for (int j = this.temp.GetLength(1) - 1; j > 0; j--)
                         {
@@ -155,15 +155,15 @@ namespace ConsoleApp1
 
                         }
                     }
-                    for (int i = 1; i < this.temp.GetLength(0); i++)
+                    for (int i = 2; i < this.temp.GetLength(0); i++)
                     {
-                        Console.WriteLine(mas[i]);
-                        if (mas[i]!= -1000)
-                            this.temp[i - 1, 0] = mas[i];
+                        if (mas[i] != -1000)
+                            this.temp[i - 1, 0] = mas[i-2];
                     }
+                    
                     if (mas[mas.Length - 1] != -1000)
                         this.temp[temp.GetLength(0) - 1, 1] = mas[mas.Length - 1];
-                    for( int i = 0; i < 7; i++)
+                    for (int i = 0; i < 7; i++)
                     {
                         if (temp[0, i] != -1000) temp[0, i] = -1000;
                         else break;
@@ -189,16 +189,16 @@ namespace ConsoleApp1
                         }
 
                     }
-                    for (int i = this.temp.GetLength(0); i > 0; i--)
+                    for (int i = this.temp.GetLength(0)-1; i > 0; i--)
                     {
                         this.temp[i - 1, this.temp.GetLength(1) - 1] = mas[i];
                     }
-                    for (int i = this.temp.GetLength(1)-1; i > 0; i--)
+                    for (int i = this.temp.GetLength(1) - 1; i > 0; i--)
                     {
-                        if ( this.temp[temp.GetLength(0) - 1, i] != -1000)
-                        this.temp[temp.GetLength(0) - 1, i] = -1000;
+                        if (this.temp[temp.GetLength(0) - 1, i] != -1000)
+                            this.temp[temp.GetLength(0) - 1, i] = -1000;
                         else break;
-                        
+
                     }
                     day1--;
                 }
@@ -425,7 +425,7 @@ namespace ConsoleApp1
 
 
 
-                
+
                 Console.WriteLine();
                 table1.print_table();
                 Console.WriteLine();
@@ -458,7 +458,7 @@ namespace ConsoleApp1
                 Console.Write("Введите ");
                 Console.ForegroundColor = ConsoleColor.Cyan;
                 Console.Write("1");
-                Console.ForegroundColor= ConsoleColor.White;
+                Console.ForegroundColor = ConsoleColor.White;
                 Console.Write(", если хотите поменять дату первого дня месяца \n");
                 Console.Write("Введите ");
                 Console.ForegroundColor = ConsoleColor.Cyan;
@@ -478,3 +478,4 @@ namespace ConsoleApp1
         }
     }
 }
+//gugugaga
