@@ -1,8 +1,7 @@
 using System;
 namespace ConsoleApp1
-{ //сделать так чтобы таблица висела в воздухе и чтобы движение вправо влево
-    // исключения
-    //gugugaga
+{ 
+    // прикол с 31ым числом, решить
     enum month1
     {
         Январь = 0,
@@ -48,8 +47,8 @@ namespace ConsoleApp1
             this.month_n = rnd.Next(1, 12);
             this.month = (month1)(month_n);
             this.day = rnd.Next(0, 7);
-
-            temp = new int[6, 7];
+			
+            temp = new int[7, 7];
             this.month_l = month_length[this.month_n];
             temp_table.gen_mass(out temp, this.day, this.month_l, this.mintemp, this.maxtemp, this.month_n);
 
@@ -78,7 +77,7 @@ namespace ConsoleApp1
                         end = true;
                         break;
                     }
-                    if (i == 0)
+                    if (i ==1)
                     {
                         if (j >= day)
                         {
@@ -106,8 +105,8 @@ namespace ConsoleApp1
         public temp_table(int day, int month)
         {
             this.day = day;
-            this.month_l = month_length[(int)this.month];
-            temp = new int[6, 7];
+            this.month_l = month_length[month];
+            temp = new int[7, 7];
             this.month = (month1)(month);
             this.month_n = month;
             temp_table.gen_mass(out temp, this.day, this.month_l, this.mintemp, this.maxtemp, this.month_n);
@@ -138,6 +137,7 @@ namespace ConsoleApp1
             int tmp;
             Random rnd = new Random();
             int[] mas = new int[7];
+            for (int i = 0; i < 7; i++) mas[i] = -1000;
             int day1 = day2 - this.day;
             if (day1 > 0)
             {
@@ -157,24 +157,28 @@ namespace ConsoleApp1
                     }
                     for (int i = 2; i < this.temp.GetLength(0); i++)
                     {
-                        if (mas[i] != -1000)
-                            this.temp[i - 1, 0] = mas[i-2];
+                        
+                           this.temp[i - 1, 0] = mas[i - 2];
                     }
-                    
+
                     if (mas[mas.Length - 1] != -1000)
-                        this.temp[temp.GetLength(0) - 1, 1] = mas[mas.Length - 1];
+                        this.temp[temp.GetLength(0) - 1, 0] = mas[mas.Length - 1];
+                    else this.temp[temp.GetLength(0) - 1, 0] = mas[mas.Length - 2];
                     for (int i = 0; i < 7; i++)
                     {
-                        if (temp[0, i] != -1000) temp[0, i] = -1000;
+                        if (temp[0, i] != -1000) temp[0, i] = temp_table.NoData;
                         else break;
                     }
                     day1--;
-                } // сдвиг вправо, то есть день меняется в большую сторону
+                    for (int i = 0; i < mas.Length; i++) Console.WriteLine(mas[i]);
+                    Console.WriteLine("_");
+                } 
+                
+                // сдвиг вправо, то есть день меняется в большую сторону
 
             }
             else
-            { // тут такая логика, если у нас изначально первый день - среда, но в процессе меняется на четверг, то данные со среды должны кануть в небытье потому что среда становится последним днем
-                // предыдушего месяца 
+            { 
                 day1 = -day1;
                 while (day1 > 0)
                 {
@@ -189,7 +193,7 @@ namespace ConsoleApp1
                         }
 
                     }
-                    for (int i = this.temp.GetLength(0)-1; i > 0; i--)
+                    for (int i = this.temp.GetLength(0) - 1; i > 0; i--)
                     {
                         this.temp[i - 1, this.temp.GetLength(1) - 1] = mas[i];
                     }
@@ -269,7 +273,6 @@ namespace ConsoleApp1
                     if (this.temp[i, j] != -1000)
                     {
                         k++;
-
                         Console.ForegroundColor = ConsoleColor.Red;
                         Console.Write($"{k} ");
                         Console.ForegroundColor = ConsoleColor.White;
@@ -289,15 +292,23 @@ namespace ConsoleApp1
             }
             set
             {
-                if (value > 0 & value <= 7)
+                try
                 {
-                    change_talbe(value - 1);
-                    day = value - 1;
+                    if (value > 0 & value <= 7)
+                    {
+							change_talbe(value-1);
+                        day = value - 1;
 
+                    }
+                    else
+                    {
+                        throw new Exception("Нет такого дня недели, выбираю день по умолчанию - понедельник");
+                    }
                 }
-                else
+                catch (Exception er)
                 {
-                    Console.WriteLine("Нет такого дня недели, выбираю день по умолчанию - понедельник");
+                    change_talbe(0);
+                    day = 1;
                 }
             }
         }
@@ -470,12 +481,13 @@ namespace ConsoleApp1
                 {
                     Console.WriteLine("Введите номер дня недели, который равен первому дню месяца, где 1 - понедельник, 7 - воскресенье");
                     string tr = Console.ReadLine();
-                    if (int.TryParse(tr, out int ok))
+                    if (int.TryParse(tr, out int ok)) {
                         table1.Day = ok;
+
+                    }
                 }
             }
             while (req != "0");
         }
     }
 }
-//gugugaga
