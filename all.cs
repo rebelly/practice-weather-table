@@ -1,7 +1,7 @@
 using System;
 namespace ConsoleApp1
 { 
-    // прикол с 31ым числом, решить
+    
     enum month1
     {
         Январь = 0,
@@ -41,9 +41,10 @@ namespace ConsoleApp1
         private int[] maxtemp = { -5, -3, 2, 11, 19, 22, 24, 22, 16, 8, 1, -3 };
         private int[] mintemp = { -10, -10, -5, 2, 8, 12, 14, 12, 7, 2, -3, -7 };
         private int month_l;
+        static Random rnd;
         public temp_table()
         {
-            Random rnd = new Random();
+            temp_table.rnd = new Random();
             this.month_n = rnd.Next(1, 12);
             this.month = (month1)(month_n);
             this.day = rnd.Next(0, 7);
@@ -55,7 +56,7 @@ namespace ConsoleApp1
         }
         static void gen_mass(out int[,] temp, int day, int month_l, int[] mintemp, int[] maxtemp, int month_n)
         {
-            Random rnd = new Random();
+            
             temp = new int[7, 7];
             int k = 0;
             bool end = false;
@@ -135,7 +136,7 @@ namespace ConsoleApp1
         {
 
             int tmp;
-            Random rnd = new Random();
+            
             int[] mas = new int[7];
             for (int i = 0; i < 7; i++) mas[i] = -1000;
             int day1 = day2 - this.day;
@@ -144,7 +145,7 @@ namespace ConsoleApp1
 
                 while (day1 > 0)
                 {
-                    for (int i = 0; i < this.temp.GetLength(0) - 1; i++)
+                    for (int i = 0; i < this.temp.GetLength(0) ; i++)
                     {
                         tmp = this.temp[i, this.temp.GetLength(1) - 1];
 
@@ -170,8 +171,7 @@ namespace ConsoleApp1
                         else break;
                     }
                     day1--;
-                    for (int i = 0; i < mas.Length; i++) Console.WriteLine(mas[i]);
-                    Console.WriteLine("_");
+
                 } 
                 
                 // сдвиг вправо, то есть день меняется в большую сторону
@@ -307,8 +307,7 @@ namespace ConsoleApp1
                 }
                 catch (Exception er)
                 {
-                    change_talbe(0);
-                    day = 1;
+                   Console.WriteLine(er);
                 }
             }
         }
@@ -385,8 +384,10 @@ namespace ConsoleApp1
             string a = Console.ReadLine();
             if (int.TryParse(a, out int x))
             {
+				try{
                 if (x == 0)
                 {
+					
                     Console.WriteLine("Введите месяц, где январь - 1, декабрь - 12");
                     string month1 = Console.ReadLine();
                     if (!int.TryParse(month1, out month_g))
@@ -413,22 +414,27 @@ namespace ConsoleApp1
                             nailed = true;
                         }
                     }
-                    if (!nailed)
-                        table1 = new temp_table(day_g - 1, month_g - 1);
+                    
+                    if (!nailed) table1 = new temp_table(day_g - 1, month_g - 1);
                     else
                     {
-                        Console.WriteLine("Месяц или первый день были заданы неверно, создаю объект по умолчанию");
-                        table1 = new temp_table();
+						throw new Exception("Месяц или первый день были заданы неверно, создаю объект по умолчанию");
+                    }
                     }
 
-                }
-                else table1 = new temp_table();
+
+                
+                
+                else{ 
+					throw new Exception("Неверная команда");
+					}
+
             }
-            else
-            {
-                Console.WriteLine("Неверно, создаю объект по умолчанию");
-                table1 = new temp_table();
-            }
+                    			catch(Exception er){
+			Console.WriteLine(er);
+			table1 = new temp_table();
+					
+                    }
 
             string req;
             do
@@ -490,4 +496,5 @@ namespace ConsoleApp1
             while (req != "0");
         }
     }
+}
 }
