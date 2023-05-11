@@ -54,6 +54,60 @@ namespace ConsoleApp1
             temp_table.gen_mass(out temp, this.day, this.month_l, this.mintemp, this.maxtemp, this.month_n);
 
         }
+        public static bool operator >(temp_table table1, temp_table table2){
+			return table1.Day > table2.Day;
+			}
+		public static bool operator <(temp_table table1, temp_table table2){
+			return table1.Day < table2.Day;
+			}
+		        public static temp_table operator ++(temp_table table1){
+					if (table1.Day == 6) table1.Day = 0;
+					else{
+			table1.Day += 1;
+			}
+			return new temp_table(table1.Day, table1.Month);
+		}
+		        public static temp_table operator --(temp_table table1){
+					if (table1.Day == 7) table1.Day = 6;
+					else{
+			table1.Day -= 1;
+			}
+			return new temp_table(table1.Day, table1.Month);_
+		}
+		 public static bool operator true(temp_table table1){
+			 bool answ = false;
+			 for (int i = table1.Day; i < table1.temp.GetLength(0); i++){
+				 for (int j = table1.Day; j < table1.temp.GetLength(1); j++)
+				 if (table1.temp[i, j] == 0) answ = false;
+				 }
+			return answ;
+		}
+		public void  this[int i, int j]{
+			set {
+				
+				this.temp[i,j] = value;
+				}
+			get {
+				return temp[i,j];
+				}
+			}
+		public static bool operator false(temp_table table1){
+			 bool answ = false;
+			 for (int i = table1.Day; i < table1.temp.GetLength(0); i++){
+				 for (int j = table1.Day; j < table1.temp.GetLength(1); j++)
+				 if (table1.temp[i, j] == 0) answ = false;
+				 }
+			return answ;
+		}
+		public int MaxTemp{
+			get{
+				return this.maxtemp[this.month]];
+				}
+			}
+		public int MintTemp{
+			get {
+				return this.mintemp[this.month]];
+			}
         static void gen_mass(out int[,] temp, int day, int month_l, int[] mintemp, int[] maxtemp, int month_n)
         {
             
